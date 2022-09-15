@@ -1,4 +1,3 @@
-import axios from "axios";
 import { generatePath } from "react-router-dom";
 
 import { ENDPOINTS } from "./apiConst";
@@ -33,10 +32,10 @@ const httpAction = (endpoint, method, payload) => {
       "Content-Type": "application/json; charset=UTF-8",
     },
     method: method ?? "GET",
-    data: payload ?? null,
+    body: payload ? JSON.stringify(payload) : null,
   };
 
-  return axios(endpoint, fetchOptions);
+  return fetch(endpoint, fetchOptions);
 };
 
 export { generateEndpoint, httpAction };

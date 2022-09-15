@@ -1,11 +1,12 @@
 import Header from "components/common/Header";
-import Sidebar from "components/common/Sidebar";
 import LoggedInRoutes from "routes/LoggedInRoutes";
+import Sidebar from "components/common/Sidebar";
 
-import "antd/dist/antd.min.css";
 import "./App.css";
+import "antd/dist/antd.min.css";
 
 function App() {
+  console.log("App");
   return (
     <div className="App">
       <Sidebar />

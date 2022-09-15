@@ -1,49 +1,23 @@
 import {
-  ADD_USERS,
-  ADD_USER,
-  CLEAR_USER,
-  CREATE_USER,
-  DELETE_USER,
-  UPDATE_USER,
+  START_GET_USERS,
+  START_CREATE_USER,
+  STORE_USER_TO_WORK,
+  START_UPDATE_USER,
+  SET_MODAL_STATE,
+  START_DELETE_USER,
+  CLEAR_STORED_USER,
 } from "redux/actionTypes";
 
-export const createUser = payload => {
-  return {
-    type: CREATE_USER,
-    payload,
-  };
-};
+export const setModalState = payload => ({ type: SET_MODAL_STATE, payload });
 
-export const addUsers = payload => {
-  return {
-    type: ADD_USERS,
-    payload,
-  };
-};
+export const getUsers = () => ({ type: START_GET_USERS });
 
-export const addUser = payload => {
-  return {
-    type: ADD_USER,
-    payload,
-  };
-};
+export const createUser = payload => ({ type: START_CREATE_USER, payload });
 
-export const updateUser = payload => {
-  return {
-    type: UPDATE_USER,
-    payload,
-  };
-};
+export const storeUser = payload => ({ type: STORE_USER_TO_WORK, payload });
 
-export const deleteUser = id => {
-  return {
-    type: DELETE_USER,
-    payload: id,
-  };
-};
+export const editUser = payload => ({ type: START_UPDATE_USER, payload });
 
-export const clearUserState = () => {
-  return {
-    type: CLEAR_USER,
-  };
-};
+export const deleteUser = payload => ({ type: START_DELETE_USER, payload });
+
+export const clearUserState = () => ({ type: CLEAR_STORED_USER });

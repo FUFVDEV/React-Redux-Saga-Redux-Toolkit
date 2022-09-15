@@ -11,7 +11,7 @@ const UserForm = ({ data, handleCancel, handleCreate, handleEdit, mode }) => {
     firstName: "",
     lastName: "",
     age: null,
-    gender: "",
+    gender: null,
     email: "",
     phone: "",
     address: "",
@@ -137,7 +137,7 @@ const UserForm = ({ data, handleCancel, handleCreate, handleEdit, mode }) => {
         <Col span={12}>
           <Form.Item label="Calle">
             <Input
-              name="street"
+              name="address"
               type="text"
               placeholder="Ingrese una calle"
               value={formData.address}
