@@ -4,18 +4,11 @@ import { Button, Row } from "antd";
 import { UserAddOutlined } from "@ant-design/icons";
 
 import { ADD_ACTION, EDIT_ACTION, DELETE_ACTION } from "consts";
-import {
-  clearUserState,
-  createUser,
-  deleteUser,
-  getUsers,
-  editUser,
-  storeUser,
-  setModalState,
-} from "redux/actions/userActions";
+import { createUser, deleteUser, getUsers, editUser } from "redux/actions/userActions";
 import CustomModal from "components/CustomModal";
 import UserTable from "components/user/UserTable";
 import UserForm from "components/user/UserForm";
+import { clearUserState, setModalState, storeUser } from "redux/slices/userSlice";
 
 const User = () => {
   const [mode, setMode] = useState("");

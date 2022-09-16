@@ -1,37 +1,35 @@
 import { call, put, takeLatest } from "redux-saga/effects";
 import { message } from "antd";
 
-import {
-  START_GET_USERS,
-  SUCCESS_GET_USERS,
-  FAILED_GET_USERS,
-  START_UPDATE_USER,
-  SUCCESS_UPDATE_USER,
-  FAILED_UPDATE_USER,
-  START_DELETE_USER,
-  SUCCESS_DELETE_USER,
-  FAILED_DELETE_USER,
-  FAILED_CREATE_USER,
-  START_CREATE_USER,
-  SUCCESS_CREATE_USER,
-} from "redux/actionTypes";
+import { GET_USERS, CREATE_USER, UPDATE_USER, DELETE_USER } from "redux/actionTypes";
 import { generateEndpoint, httpAction } from "api/ApiUtils";
 import { inputUserAdapter, ouputUserAdapter } from "adapters/user.adapter";
+import {
+  createUser,
+  deleteUser,
+  editUser,
+  failedUserOperation,
+  setUsers,
+  startUserOperation,
+} from "redux/slices/userSlice";
 
-function* getUsers() {
+function* getUsersSaga() {
   try {
+    yield put(startUserOperation());
+
     const response = yield call(httpAction, generateEndpoint("users", { searchs: { limit: 5 } }));
     const data = yield call([response, "json"]);
     const mappedData = data.users.map(user => inputUserAdapter(user));
 
-    yield put({ type: SUCCESS_GET_USERS, payload: mappedData });
+    yield put(setUsers(mappedData));
   } catch {
-    yield put({ type: FAILED_GET_USERS });
+    yield put(failedUserOperation());
   }
 }
 
-function* createUser({ payload: user }) {
+function* createUserSaga({ payload: user }) {
   try {
+    yield put(startUserOperation());
     message.loading({ content: "Ejecutando operación...", key: "messageKey" });
 
     const response = yield call(
@@ -41,7 +39,7 @@ function* createUser({ payload: user }) {
       ouputUserAdapter(user)
     );
     const data = yield call([response, "json"]);
-    yield put({ type: SUCCESS_CREATE_USER, payload: inputUserAdapter(data) });
+    yield put(createUser(inputUserAdapter(data)));
 
     message.success({
       content: "Usuario creado exitosamente.",
@@ -49,7 +47,7 @@ function* createUser({ payload: user }) {
       duration: 2,
     });
   } catch (error) {
-    yield put({ type: FAILED_CREATE_USER });
+    yield put(failedUserOperation());
 
     message.error({
       content: "Ocurrió un error al intentar crear el usuario.",
@@ -59,8 +57,9 @@ function* createUser({ payload: user }) {
   }
 }
 
-function* editUser({ payload: user }) {
+function* editUserSaga({ payload: user }) {
   try {
+    yield put(startUserOperation());
     message.loading({ content: "Ejecutando operación...", key: "messageKey" });
 
     const response = yield call(
@@ -70,7 +69,7 @@ function* editUser({ payload: user }) {
       ouputUserAdapter(user)
     );
     const data = yield call([response, "json"]);
-    yield put({ type: SUCCESS_UPDATE_USER, payload: inputUserAdapter(data) });
+    yield put(editUser(inputUserAdapter(data)));
 
     message.success({
       content: "Usuario actualizado exitosamente.",
@@ -78,7 +77,7 @@ function* editUser({ payload: user }) {
       duration: 2,
     });
   } catch (error) {
-    yield put({ type: FAILED_UPDATE_USER });
+    yield put(failedUserOperation());
 
     message.error({
       content: "Ocurrió un error al intentar actualizar los datos del usuario.",
@@ -88,8 +87,9 @@ function* editUser({ payload: user }) {
   }
 }
 
-function* deleteUser({ payload: userId }) {
+function* deleteUserSaga({ payload: userId }) {
   try {
+    yield put(startUserOperation());
     message.loading({ content: "Ejecutando operación...", key: "messageKey" });
 
     const response = yield call(
@@ -98,7 +98,7 @@ function* deleteUser({ payload: userId }) {
       "DELETE"
     );
     const data = yield call([response, "json"]);
-    yield put({ type: SUCCESS_DELETE_USER, payload: inputUserAdapter(data) });
+    yield put(deleteUser(inputUserAdapter(data)));
 
     message.success({
       content: "Usuario eliminado exitosamente.",
@@ -106,7 +106,7 @@ function* deleteUser({ payload: userId }) {
       duration: 2,
     });
   } catch (error) {
-    yield put({ type: FAILED_DELETE_USER });
+    yield put(failedUserOperation());
 
     message.error({
       content: "Ocurrió un error al intentar eliminar al usuario.",
@@ -118,8 +118,8 @@ function* deleteUser({ payload: userId }) {
 
 // Watchers
 export default function* userWatcher() {
-  yield takeLatest(START_GET_USERS, getUsers);
-  yield takeLatest(START_CREATE_USER, createUser);
-  yield takeLatest(START_UPDATE_USER, editUser);
-  yield takeLatest(START_DELETE_USER, deleteUser);
+  yield takeLatest(GET_USERS, getUsersSaga);
+  yield takeLatest(CREATE_USER, createUserSaga);
+  yield takeLatest(UPDATE_USER, editUserSaga);
+  yield takeLatest(DELETE_USER, deleteUserSaga);
 }

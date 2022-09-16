@@ -4,7 +4,6 @@ import { UserOutlined } from "@ant-design/icons";
 import "styles/sidebarStyles.css";
 
 const Sidebar = () => {
-  console.log("SideBar");
   return (
     <div className="sidebar">
       <div className="sidebar__logo">ADMIN SYSTEM</div>
